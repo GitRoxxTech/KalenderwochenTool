@@ -1,5 +1,44 @@
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
 
-
-#currentWeek, #workDays {
+p {
     display: inline;
+}
+
+#currentWeek, #calendarDays, #workDaysBrutto, #workDaysNetto, #calendarWeeks, #startDay, #endDay, #startWeek, #endWeek {
+    text-align: center;
+}
+
+input {
+    border: 0px;
+    background-color: lightgray;
+}
+
+#workDaysNetto {
+    width: 100%;
+    padding: 0;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.noPad {
+    padding: 0;
+}
+
+.bg-lightgray {
+    background-color: lightgray;
+}
+
+.calendarTableCell {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.calendarTableWeekCell {
+    padding-left: 30px;
+    padding-right: 30px;
 }

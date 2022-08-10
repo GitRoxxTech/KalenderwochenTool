@@ -5,22 +5,82 @@
         <meta name="description" content="Kalender Wochen Tool">
         <meta name="keywords" content="calendar week tool">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <link rel="stylesheet" href="KalenderWochenTool.css">
         <script language="javascript" type="text/javascript" src="KalenderWochenTool.js"></script>
+        <script language="javascript" type="text/javascript" src="ArbeitsTageTool.js"></script>
+        <link rel="stylesheet" href="KalenderWochenTool.css">
     </head>
     <body>
         <div>
             Aktuelle Kalenderwoche: <p id="currentWeek"></p>
+            <div>
+                <button id="lastYearButton"><< vorheriges</button>
+                <input type="number" min="1900" max="2099" step="1" onkeypress="return onlyNumberKey(event)" id="yearInput">
+                <button id="nextYearButton">nächstes >></button>
+                <table id="calendarWeeksTable">
+                    <tr><th colspan="8">Kalender Wochen <span id="calendarWeeksYear"></span></th></tr>
+                    <tr>
+                        <th>KW</th>
+                        <th>Mo</th>
+                        <th>Di</th>
+                        <th>Mi</th>
+                        <th>Do</th>
+                        <th>Fr</th>
+                        <th>Sa</th>
+                        <th>So</th>
+                    </tr>
+                </table>
+            </div>
         </div>
         <br>
         <div>
-            <label for="startDate">Start Datum:</label>
-            <input type="date" id="startDate" name="startDate"><br>
-            <label for="endDate">End Datum:</label>
-            <input type="date" id="endDate" name="endDate"><br>
-            <br>
-            Arbeitstage: <p id="workDays"></p>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Start Datum</th>
+                    <th>End Datum</th>
+                </tr>
+                <tr>
+                    <th>Datum</th>
+                    <td class="bg-lightgray"><input type="date" id="startDate" name="startDate"></td>
+                    <td class="bg-lightgray"><input type="date" id="endDate" name="endDate"></td>
+                </tr>
+                <tr>
+                    <th>Wochentag</th>
+                    <td id="startDay"></td>
+                    <td id="endDay"></td>
+                </tr>
+                <tr>
+                    <th>Kalenderwoche</th>
+                    <td id="startWeek"></td>
+                    <td id="endWeek"></td>
+                </tr>
+                <tr><th>=</th></tr>
+                <tr>
+                    <th>Kalendertage</th>
+                    <td colspan="2" id="calendarDays"></td>
+                </tr>
+                <tr>
+                    <th>Arbeitstage brutto</th>
+                    <td colspan="2" id="workDaysBrutto"></td>
+                </tr>
+                <tr>
+                    <th>Arbeitstage netto</th>
+                    <td class="noPad bg-lightgray" colspan="2"><input type="number" id="workDaysNetto" onkeypress="return onlyNumberKey(event)"></td>
+                </tr>
+                <tr>
+                    <th>Kalenderwochen</th>
+                    <td colspan="2" id="calendarWeeks"></td>
+                </tr>
+            </table>
+            <!-- <label for="startDate">Start Datum:</label> -->
+            <!-- <input type="date" id="startDate" name="startDate"><br> -->
+            <!-- <label for="endDate">End Datum:</label> -->
+            <!-- <input type="date" id="endDate" name="endDate"><br> -->
+            <!-- <br> -->
+            <!-- Kalendertage: <p id="calendarDays"></p><br>
+            Arbeitstage brutto: <p id="workDaysBrutto"></p><br>
+            Arbeitstage netto: <p id="workDaysNetto"></p><br>
+            Kalenderwochen: <p id="calendarWeeks"></p><br> -->
         </div>
     </body>
-
 </html>
