@@ -15,7 +15,7 @@ input {
     background-color: lightgray;
 }
 
-#workDaysNetto {
+#workDaysNetto, #workDaysBrutto, #calendarDays {
     width: 100%;
     padding: 0;
 }
@@ -31,6 +31,10 @@ table, th, td {
 
 .bg-lightgray {
     background-color: lightgray;
+}
+
+.text-red {
+    color: red;
 }
 
 .calendarTableCell {

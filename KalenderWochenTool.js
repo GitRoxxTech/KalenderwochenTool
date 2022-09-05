@@ -1,3 +1,22 @@
+const holidayData = new Map();
+
+async function getHolidayData(year) {
+    if(isNaN(year)) return;
+    if(holidayData.has(year)) return;
+    
+    // get raw data
+    let rawData = await $.get("https://feiertage-api.de/api/", {
+        'jahr': year,
+    })
+
+    // transform data format
+    let data = new Map()
+    Object.entries(rawData).forEach(([bundesLand, holidays]) => {data.set(bundesLand, Object.values(holidays).map(holiday => new Date(holiday.datum)));});
+
+    // store data
+    holidayData.set(year, data);
+}
+
 // helper functions
 function onlyNumberKey(event) {
     if(!/[0-9]/.test(event.key)) event.preventDefault();
@@ -50,20 +69,21 @@ function getValidYear(year) {
 }
 
 async function isHoliday(date = new Date()) {
-    // transform date format
-    let day = ("0" + date.getDate()).slice(-2);
-    let month = ("0" + (date.getMonth() + 1)).slice(-2);
-    let newDate = (day) + "." + (month) + "." + date.getFullYear();
+    date.setHours(1,0,0,0); // match time format
 
-    // get whether day is a holiday
-    return $.get("https://ipty.de/feiertag/api.php", {
-        'do': "isFeiertag",
-        'datum': newDate,
-        'loc': "BW"
-    })
+    // check if year data exists
+    const year = date.getFullYear();
+    if(!holidayData.has(year)) await getHolidayData(year);
+
+    // check if bundesLand exists
+    var bundesLand = $('#countrySelection').val();
+    if(!holidayData.get(year).has(bundesLand)) bundesLand = 'NATIONAL';
+
+    // check if date is holiday
+    return holidayData.get(year).get(bundesLand).some(holiday => +holiday === +date);
 }
 
-function updateCalendarWeeksTable(year = getSelectedYear()) {
+async function updateCalendarWeeksTable(year = getSelectedYear()) {
 	year = getValidYear(year); 
 
     $('#calendarWeeksYear').html(year);
@@ -89,6 +109,7 @@ function updateCalendarWeeksTable(year = getSelectedYear()) {
         cell.innerHTML = dateString;
         cell.classList.add("calendarTableCell");
         if(date.getFullYear() != year) cell.classList.add("bg-lightgray");
+        if(date.getDay() === 0 || await isHoliday(date)) cell.classList.add("text-red");
     }
 }
 
@@ -114,11 +135,11 @@ function setResultInfos(startDate = new Date($('#startDate').val()), endDate = n
     $('#startDay').html(toDayString(startDate.getDay()));
     $('#endDay').html(toDayString(endDate.getDay()));
     $('#startWeek').html('KW'+getWeekNumber(startDate)+' '+startDate.getFullYear());
-    $('#endWeek')  .html('KW'+getWeekNumber(endDate)  +' '+endDate.getFullYear());
+    $('#endWeek').html('KW'+getWeekNumber(endDate)  +' '+endDate.getFullYear());
 
     var differenceDays = Math.ceil((endDate - startDate) / (24*60*60*1000))+1;
-    $('#calendarDays').html(differenceDays);
-    $('#workDaysBrutto').html(getWorkDaysBrutto().length);
+    $('#calendarDays').val(differenceDays);
+    $('#workDaysBrutto').val(getWorkDaysBrutto().length);
     $('#calendarWeeks').html((Math.round(differenceDays/7*1000)/1000).toString().replace('.', ','));
 }
 
@@ -137,16 +158,35 @@ function clearResultInfos(clearStart = false, clearEnd = false) {
     $('#endDay').html(null);
     $('#endWeek').html(null);
 
-    $('#calendarDays').html(null);
-    $('#workDaysBrutto').html(null);
+    $('#calendarDays').val(null);
+    $('#workDaysBrutto').val(null);
     $('#calendarWeeks').html(null);
 }
 
-async function getDate(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val()), workDays = parseInt($('#workDaysNetto').val())) {
+function getDateFromKalanderDays(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val()), days = parseInt($('#calendarDays').val())) {
+    if(isNaN(days)) return;
+    if(days < 1) {
+        days = 1;
+        $('#calendarDays').val(1);
+    }
+    var isStart = isNaN(startDate);
+    days--; // to include startDate as work date
+    var newDate = new Date((isStart ? endDate.setDate(endDate.getDate()-days) : startDate.setDate(startDate.getDate()+days)));
+    var month = ('0'+(newDate.getMonth()+1)).slice(-2);
+    var day = ('0'+newDate.getDate()).slice(-2);
+    var dateString = newDate.getFullYear()+'-'+month+'-'+day;
+
+    $(isStart?'#startDate':'#endDate').val(dateString);
+
+    getWorkDays();
+}
+
+async function getDate(isNetto=true, startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val()), workDays = parseInt($('#workDaysNetto').val())) {
+    if(!isNetto) workDays = parseInt($('#workDaysBrutto').val());
     if(isNaN(workDays)) return;
     if(workDays < 1) {
         workDays = 1;
-        $('#workDaysNetto').val(1);
+        $(isNetto?'#workDaysNetto':'#workDaysBrutto').val(1);
     }
     var isStart = isNaN(startDate);
 
@@ -155,7 +195,7 @@ async function getDate(startDate = new Date($('#startDate').val()), endDate = ne
     for(var date = new Date(isStart?endDate:startDate), currentWorkDays = 0; currentWorkDays < workDays; date.setDate(date.getDate()+(isStart?-1:1))) {
         // check if sunday
         if(date.getDay() === 0) continue;
-        if(await isHoliday(date) === '1') continue;
+        if(isNetto && await isHoliday(date)) continue;
         currentWorkDays++;
     }
     date.setDate(date.getDate()-(isStart?-1:1));
@@ -165,6 +205,7 @@ async function getDate(startDate = new Date($('#startDate').val()), endDate = ne
     var dateString = date.getFullYear()+'-'+month+'-'+day;
 
     $(isStart?'#startDate':'#endDate').val(dateString);
+    if(!isNetto) return getWorkDays();
     setResultInfos();
 }
 
@@ -174,8 +215,9 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
 
     clearResultInfos();
 
-    // get all days in between
-    var days = [];
+    var workDays = 0;
+
+    // check all days in between
     for(var date = new Date(startDate); date <= endDate; date.setDate(date.getDate()+1)) {
         // console.log(date);
 
@@ -183,35 +225,42 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
         if(date.getDay() === 0) continue;
 
         // check if holiday
-        days.push(isHoliday(date));
+        if(await isHoliday(date)) continue;
+
+        // else is workday
+        workDays++;
     }
 
-    // wait for all requests to be received
-    days = await Promise.all(days);
-
-    // count workdays
-    var workDays = days.reduce((workDays, isHoliday) => workDays+=isHoliday==="0", 0);
-
-    // console.log(workDays);
     $('#workDaysNetto').val(workDays);
     setResultInfos();
 }
 
 // init
-$(function() {
+$(async function() {
     // get calendar week
+    const currentYear = new Date().getFullYear();
     $('#currentWeek').html(getWeekNumber());
-    updateCalendarWeeksTable(new Date().getFullYear());
-    $('#yearInput').val(new Date().getFullYear())
+    updateCalendarWeeksTable(currentYear);
+    $('#yearInput').val(currentYear);
     // set calendar year listener
     $('#lastYearButton').click(() => { $('#yearInput').val(getSelectedYear()-1); updateCalendarWeeksTable(); });
     $('#nextYearButton').click(() => { $('#yearInput').val(getSelectedYear()+1); updateCalendarWeeksTable(); });
     $('#yearInput').change(() =>     { $('#yearInput').val(getSelectedYear());   updateCalendarWeeksTable(); });
+
+    // get all holidays for a span of years
+    let requests = [];
+    for(var year = currentYear-2; year <= currentYear+10; year++)
+        requests.push(getHolidayData(year));
+    // wait for all requests to be received
+    days = await Promise.all(requests);
 
     // get work days
     getWorkDays();
 
     // set work day listener
     $('#startDate, #endDate').change(() => getWorkDays());
+    $('#calendarDays').change(() => {getDateFromKalanderDays()});
     $('#workDaysNetto').change(() => {getDate()});
+    $('#workDaysBrutto').change(() => {getDate(false)});
+    $('#countrySelection').change(() => {getWorkDays(); updateCalendarWeeksTable()});
 })

@@ -57,11 +57,11 @@
                 <tr><th>=</th></tr>
                 <tr>
                     <th>Kalendertage</th>
-                    <td colspan="2" id="calendarDays"></td>
+                    <td class="noPad bg-lightgray" colspan="2"><input type="number" id="calendarDays" onkeypress="return onlyNumberKey(event)"></td>
                 </tr>
                 <tr>
                     <th>Arbeitstage brutto</th>
-                    <td colspan="2" id="workDaysBrutto"></td>
+                    <td class="noPad bg-lightgray" colspan="2"><input type="number" id="workDaysBrutto" onkeypress="return onlyNumberKey(event)"></td>
                 </tr>
                 <tr>
                     <th>Arbeitstage netto</th>
@@ -72,6 +72,25 @@
                     <td colspan="2" id="calendarWeeks"></td>
                 </tr>
             </table>
+            <select id="countrySelection">
+                <option value="BW" selected>Baden-Württemberg</option>
+                <option value="BY">Bayern</option>
+                <option value="BE">Berlin</option>
+                <option value="BB">Brandenburg</option>
+                <option value="HB">Bremen</option>
+                <option value="HH">Hamburg</option>
+                <option value="HE">Hessen</option>
+                <option value="MV">Mecklenburg-Vorpommern</option>
+                <option value="NI">Niedersachsen</option>
+                <option value="NW">Nordrein-Westfalen</option>
+                <option value="RP">Rheinland-Pfalz</option>
+                <option value="SL">Saarland</option>
+                <option value="SN">Sachsen</option>
+                <option value="ST">Sachsen-Anhalt</option>
+                <option value="SH">Schleswig-Holstein</option>
+                <option value="TH">Thüringen</option>
+                <option value="NATIONAL">National</option>
+            </select>
             <!-- <label for="startDate">Start Datum:</label> -->
             <!-- <input type="date" id="startDate" name="startDate"><br> -->
             <!-- <label for="endDate">End Datum:</label> -->
