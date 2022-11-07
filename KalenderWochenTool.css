@@ -1,32 +1,32 @@
 * {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif */
 }
 
 p {
-    display: inline;
+    /* display: inline; */
 }
 
-#currentWeek, #calendarDays, #workDaysBrutto, #workDaysNetto, #calendarWeeks, #startDay, #endDay, #startWeek, #endWeek {
+#currentWeek, #calendarDays, #workDaysBrutto, #workDaysNetto, #calendarWeeks, #startDay, #endDay, #startWeek, #endWeek, #saturdays, #sundays, #weekends, #holidays  {
     text-align: center;
 }
 
-input {
-    border: 0px;
-    background-color: lightgray;
-}
-
-#workDaysNetto, #workDaysBrutto, #calendarDays {
+#workDaysNetto, #workDaysBrutto, #calendarDays, #saturdays, #sundays, #weekends, #holidays {
     width: 100%;
     padding: 0;
 }
 
-table, th, td {
+/* table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+} */
+
+.style-light-accent-bg {
+    background-color: #5aa747;
+    filter: brightness(1.2);
 }
 
-.noPad {
-    padding: 0;
+th {
+    text-align: center;
 }
 
 .bg-lightgray {
@@ -37,6 +37,12 @@ table, th, td {
     color: red;
 }
 
+#calendarTable {
+    /* position: relative; */
+    max-height: 85vh;
+    overflow: auto;
+}
+
 .calendarTableCell {
     padding-left: 20px;
     padding-right: 20px;
@@ -45,4 +51,117 @@ table, th, td {
 .calendarTableWeekCell {
     padding-left: 30px;
     padding-right: 30px;
+    border-right: 1px solid black;
 }
+
+.scrollspy-example {
+   
+    height: calc(100vh - 12em);
+    overflow: auto;
+}
+
+#countryOption {
+  
+    height: calc(100vh - 12em);
+    overflow: auto;
+}
+
+#holidayList {
+    max-height: calc(100vh - 50em);
+    overflow: auto;
+}
+
+.modal-body {
+    height: calc(100vh - 12em);
+}
+
+ /* Dropdown Button */
+ .dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #3e8e41;
+  }
+  
+  /* The search field */
+  .search {
+    box-sizing: border-box;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* The search field when it gets focus/clicked on */
+  #countrySearch:focus {outline: 3px solid #ddd;}
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    border: 1px solid #ddd;
+    z-index: 1;
+    overflow: auto;
+    max-height: calc(100vh - 10rem)
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #f1f1f1}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;} 
+
+  .hide { display: none;}
+
+  .switch.success-switch label input[type=checkbox]:checked + .lever {
+    background-color: #5aa747;
+  }
+  .switch.success-switch label input[type=checkbox]:checked + .lever:after {
+    background-color: #00C851;
+  }
+
+  #saturdaySwitch {
+    transform: scale(1.8);
+    background-color: darkgray;
+    box-shadow: none;
+  }
+
+  #saturdaySwitch:checked {
+    border-color: #3d792e;
+    background-color: #5aa747;
+  }
+
+  #saturdaySwitch:active {
+    border-color: #284d1f;
+    background-color: #5aa747;;
+  }
+
+  #saturdaySwitch:focus {
+    outline: none;
+  }

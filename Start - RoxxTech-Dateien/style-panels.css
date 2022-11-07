@@ -1,0 +1,172 @@
+/*
+----------------------------------------------------------
+
+#Panels
+
+----------------------------------------------------------
+*/
+.panel {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+.panel-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+.panel-body > *:first-child {
+  margin-top: 0 !important;
+}
+.panel-body.no-internal-gutter > div > *:not(:first-child) {
+  margin-top: 0px;
+}
+.panel-body.one-internal-gutter > div > *:not(:first-child) {
+  margin-top: 1px;
+}
+.panel-body.half-internal-gutter > div > *:not(:first-child) {
+  margin-top: 18px;
+}
+.panel-body.single-internal-gutter > div > *:not(:first-child) {
+  margin-top: 36px;
+}
+.panel-body.double-internal-gutter > div > *:not(:first-child) {
+  margin-top: 72px;
+}
+@media (max-width: 959px) {
+  .panel-body.double-internal-gutter > div > *:not(:first-child) {
+    margin-top: 54px;
+  }
+}
+@media (max-width: 569px) {
+  .panel-body.double-internal-gutter > div > *:not(:first-child) {
+    margin-top: 36px;
+  }
+}
+.panel-body.triple-internal-gutter > div > *:not(:first-child) {
+  margin-top: 108px;
+}
+@media (max-width: 1499px) {
+  .panel-body.triple-internal-gutter > div > *:not(:first-child) {
+    margin-top: 90px;
+  }
+}
+@media (max-width: 959px) {
+  .panel-body.triple-internal-gutter > div > *:not(:first-child) {
+    margin-top: 72px;
+  }
+}
+@media (max-width: 569px) {
+  .panel-body.triple-internal-gutter > div > *:not(:first-child) {
+    margin-top: 54px;
+  }
+}
+.panel-body.quad-internal-gutter > div > *:not(:first-child) {
+  margin-top: 144px;
+}
+@media (max-width: 1699px) {
+  .panel-body.quad-internal-gutter > div > *:not(:first-child) {
+    margin-top: 126px;
+  }
+}
+@media (max-width: 1499px) {
+  .panel-body.quad-internal-gutter > div > *:not(:first-child) {
+    margin-top: 108px;
+  }
+}
+@media (max-width: 959px) {
+  .panel-body.quad-internal-gutter > div > *:not(:first-child) {
+    margin-top: 90px;
+  }
+}
+@media (max-width: 569px) {
+  .panel-body.quad-internal-gutter > div > *:not(:first-child) {
+    margin-top: 72px;
+  }
+}
+.panel-title {
+  margin-top: 0 !important;
+}
+.uncode-accordion:not(.default-typography) .panel-title {
+  font-size: 14px;
+  line-height: 1.75;
+  margin: 18px 0 0;
+}
+.panel-title > a {
+  display: block;
+  color: inherit;
+  position: relative;
+  padding: 18px 0px 18px 0px;
+}
+.uncode-accordion:not(.default-typography) .panel-title > a > span {
+  font-size: 12px;
+}
+.panel-title > a > span:after {
+  font-family: "uncodeicon";
+  margin-top: 0px;
+  font-weight: normal;
+  font-size: 15px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(0);
+  transition: transform 200ms ease-out;
+}
+.align_left .panel-title > a > span:after {
+  content: "\f105";
+  right: 0;
+  margin-right: 0;
+}
+.align_right .panel-title > a > span:after {
+  content: "\f104";
+  left: 0;
+  margin-left: 0;
+}
+.plus-signed .panel-title > a > span:after {
+  content: "\e114";
+  font-size: 1em;
+}
+.panel-title > a i.fa {
+  font-size: 1.35em;
+  vertical-align: text-bottom;
+}
+body:not(.rtl) .panel-title > a i.fa.icon-position-left {
+  margin: 0px 18px 0px 0px;
+}
+body.rtl .panel-title > a i.fa.icon-position-left {
+  margin: 0px 0px 0px 18px;
+}
+body:not(.rtl) .panel-title > a i.fa.icon-position-right {
+  margin: 0px 0px 0px 18px;
+}
+body.rtl .panel-title > a i.fa.icon-position-right {
+  margin: 0px 18px 0px 0px;
+}
+.panel-title.active > a span:after {
+  transform: translateY(-50%) translateX(-50%) rotate(90deg);
+}
+.plus-signed .panel-title.active > a span:after {
+  transform: translateY(-50%) rotate(45deg);
+}
+.panel-group {
+  margin-bottom: 0;
+}
+.panel-group .panel {
+  overflow: hidden;
+}
+.panel-group .panel + .panel {
+  margin-top: -1px;
+}
+.panel-group .panel-heading {
+  border-radius: 0px;
+  padding: 0;
+}
+.panel-group .panel-heading + .panel-collapse .panel-body {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+.panel-group .panel-heading + .panel-collapse.collapsing * {
+  transition: none !important;
+}
+.panel-group .panel:last-child {
+  border-bottom-width: 1px;
+}

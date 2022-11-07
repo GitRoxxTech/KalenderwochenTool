@@ -1,0 +1,507 @@
+/*
+Theme Name: Uncode Child
+Description: Child theme for Uncode theme
+Author: Undsgn™
+Author URI: http://www.undsgn.com
+Template: uncode
+Version: 1.0.0
+Text Domain: uncode
+*/
+
+/*Logo wider*/
+@media (min-width: 960px){
+    .row-menu.limit-width {
+    max-width: 1550px;
+    margin: auto;
+        }
+}
+
+/*fix header overlow*/
+.header-wrapper,.header-wrapper .header-uncode-block{
+	overflow: visible;
+}
+
+#logo-container-mobile{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.uncode-custom-fields .detail-value {
+    color: #5aa747 !important;
+    fill: #5aa747 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.00em;
+    font-weight: 600;
+    font-family: Lato, -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+/*style breadcrumb*/
+.row.row-parent.style-light.limit-width {
+    padding: 18px;
+}
+
+.breadcrumb-title.h5.text-bold {
+    display: none;
+}
+
+.breadcrumb.header-subtitle {
+    margin-top: 0;
+}
+
+/*make logo svg bigger*/
+.logo-container .html-code svg{
+    width: auto;
+}
+
+/*make small smaller*/
+small{
+    font-size: smaller;
+}
+
+/*Fix Main Menu Product Opacity because of dropdown menu
+.menu-light .menu-smart > li.current-menu-ancestor.dropdown > a, body:not(.menu-force-opacity) .style-dark-override:not(.is_stuck):not(.is_mobile_open).menu-transparent .menu-horizontal-inner > .nav > .menu-smart > li.current-menu-parent > a, body:not(.menu-force-opacity) .style-dark-override:not(.is_stuck):not(.is_mobile_open).menu-transparent .menu-horizontal-inner > .nav > .menu-smart > li.current-menu-ancestor > a {
+	color: rgba(255,255,255,1) !important;
+}
+
+.menu-light .menu-smart > li.current-menu-ancestor.dropdown.active > a {
+	color: rgba(255,255,255,0.5) !important;
+}
+*/
+
+/*Min Height für Bilder Kacheln // Füge die Klasse min-height der Column hinzu
+.min-height .uncoltable{
+	height: 400px; /*wichtig für firefox*/
+/*	min-height: 400px !important;
+}
+*/
+
+/*Footer Top Border
+.site-footer > div.vc_row.border-accent-color, .site-footer > div[class*="border"] {
+    border-top-width: 10px !important;
+}
+*/
+
+.z-index-9{
+	z-index: 9;
+}
+
+/*Kontaktformular*/
+.wpcf7-form-control.wpcf7-text.wpcf7-validates-as-required {
+    width: 100%;
+}
+
+.wpcf7-form-control.wpcf7-textarea {
+    height: 12em;
+}
+
+p.contact.italic.center {
+    font-size: 10px;
+    font-style: italic;
+    margin-top: 0;
+    line-height: 12px;
+}
+
+.contact-text{
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.wpcf7-recaptcha{
+	margin-top: 18px;
+}
+
+/*Cookiedingsbums*/
+#cookiedingsbums a {color:#fff; text-decoration:none;}
+
+#cookiedingsbums a:hover {text-decoration:underline;}
+
+#cookiedingsbums div {padding:10px; padding-right:60px;}
+
+#cookiedingsbums p{
+    font-size: 12px;
+    margin-top: 0px;
+}
+
+#cookiedingsbums {
+       outline: 1px solid #dd3333; 
+   text-align:right;
+   color: #fff;
+   border-top:1px solid #dd3333;
+   background: #141618; 
+   background: -moz-linear-gradient(top, #141618 0%, #1b1d1f 100%); 
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141618), color-stop(100%,#1b1d1f)); 
+   background: -webkit-linear-gradient(top, #141618 0%,#1b1d1f 100%); 
+   background: -o-linear-gradient(top, #141618 0%,#1b1d1f 100%);
+   background: -ms-linear-gradient(top, #141618 0%,#1b1d1f 100%); 
+   background: linear-gradient(to bottom, #141618 0%,#1b1d1f 100%); 
+   filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#141618', endColorstr='#1b1d1f',GradientType=0 ); 
+   position:fixed;
+   bottom:0px; 
+   z-index:10000; 
+   width:100%; 
+   font-size:12px; 
+   line-height:16px;
+}
+
+#cookiedingsbumsCloser {
+   color: #fff;
+   font: 14px/100% arial, sans-serif;
+   position: absolute;
+   right: 15px;
+   text-decoration: none;
+   /*text-shadow: 0 1px 0 #fff;*/
+   top: 5px;
+   cursor:pointer;
+   border-top:1px solid white; 
+   border-left:1px solid white; 
+   border-bottom:1px solid #7b92a9; 
+   border-right:1px solid #7b92a9; 
+   padding:4px;
+   background: #141618; /* Old browsers */
+   background: -moz-linear-gradient(top, #141618%, #1b1d1f 100%); 
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#141618), color-stop(100%,#1b1d1f)); 
+   background: -webkit-linear-gradient(top, #141618%,#1b1d1f 100%); 
+   background: -o-linear-gradient(top, #141618%,#1b1d1f 100%); 
+   background: -ms-linear-gradient(top, #141618%,#1b1d1f 100%); 
+   background: linear-gradient(to bottom, #141618%,#1b1d1f 100%); 
+   filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#141618', endColorstr='#1b1d1f',GradientType=0 );
+    -moz-border-radius: 100px;  
+    -webkit-border-radius: 100px;
+    border-radius: 100px;
+ }
+
+#cookiedingsbumsCloser:hover {border-bottom:1px solid white; border-right:1px solid white; border-top:1px solid #7b92a9; border-left:1px solid #7b92a9;}
+
+
+@media only screen and (max-width: 478px) {
+	.wpcf7-inline-wrapper .wpcf7-inline-field{
+		width: 100%;
+		padding: 0;
+	}
+	.wpcf7-inline-wrapper p{
+		margin: 18px 0px 0px 0px !important;
+	}
+}
+
+/*Fix margin and center on google Recaptcha*/
+.g-recaptcha {
+	margin: 18px auto 0;
+}
+
+/*Footer abstand Title zu menü*/
+footer .widget-container .widget-title{
+	margin-bottom: 12px;
+}
+
+/*Fix für SVG Datei*/
+div.icon-media img {
+    width: 100px;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.icon-media{margin:0;}
+
+/*change link hover color on accent background*/
+/*add class custom-link-hover-color to element*/
+.custom-link-hover-color a:hover{
+    color: #000000 !important;
+}
+
+/*Fix für Media in Icon Box*/
+.icon-box-icon.fa-container img{
+    width: 100%;
+}
+
+.round img{
+    -o-border-radius: 2.5em;
+-moz-border-radius: 2.5em;
+-webkit-border-radius: 2.5em;
+-ms-border-radius: 2.5em;
+border-radius: 2.5em;
+}
+
+div.uncode-accordion div.icon-box-content div.icon-box-heading h3.h3{
+    font-size: 15px;
+
+}
+
+/*Make Google Recaptcha v3 on top of everything else*/
+.grecaptcha-badge{
+    z-index: 99;
+}
+
+/*Icon Liste 3 Spalten nebeneinander*/
+.DreiSpaltenListe ul.icons li {
+    display: inline-block;
+    width: 33%;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+/*Fix Link on hover bei accent background*/
+.style-accent-bg a:hover{
+	color: #000000 !important;
+}
+
+
+/*Fix Footer Widget Title spacing*/
+footer .widget-container .widget-title{
+	margin-bottom: 18px;
+}
+
+/*Call To Action Top Border*/
+.cta-border{
+    border-top-width: 5px !important;
+}
+
+/*/Fix für icon Box Header*/
+.box-heading-space .icon-box-heading {
+    height: auto !important;
+}
+
+/*Show Footer top border*/
+.site-footer .row-container{
+border-top-width: 5px;
+}
+
+/*Custom Border Width for youtube container*/
+.custom-border iframe{
+	border: 10px solid white !important;
+	border-radius: 8px !important;
+}
+
+/*Fix Telefonnummer in Mitarbeiter*/
+.custom-phone-number a {
+	color: white;
+}
+
+.custom-phone-number a:hover {
+	color: #5aa747;
+}
+
+
+/*Referenzen Label Styling*/
+
+/*Details untereinander machen*/
+.detail-container .detail-label{
+	display: table-header-group;
+}
+
+/*abstände korrigieren*/
+.detail-container .detail-value{
+	padding-bottom: 16px;
+}
+
+.info-content ul {
+	margin-top: 5px;
+	margin-bottom: 16px;
+}
+
+/*fix für falsches HTML in erster liste*/
+.info-content > ul {
+    padding-left: 9px;
+    margin-top: -13px;
+}
+
+/*Fix Details second line margin*/
+.info-content ul, .info-content > ul{
+	margin-left: 2.142857142857143em;
+	list-style-type: none;
+}
+
+.info-content ul li, .info-content > ul > li{
+	position: relative;
+}
+
+.info-content ul li:before , .info-content > ul li:before  {
+	position: absolute;
+	left: -2.142857142857143em;
+	width: 2.142857142857143em;
+	text-align: center;
+	line-height: inherit;
+}
+
+/*.info-content span.detail-container:last-of-type .detail-value{
+    display: none;
+}
+*/
+
+/*Referenzen Kunde » einfügen in übersicht*/
+.t-entry-cf-detail-169758::before, .t-entry-cf-detail-209682::before{
+	content: "» ";
+}
+
+.t-entry-readmore.btn-container::before{
+    	content: "» ";
+        text-transform: none;
+    font-weight: 500 !important;
+    color: #62bb46;
+    font-size: 15px;
+    letter-spacing: normal;
+}
+
+.t-entry-readmore.btn-container{
+	line-height: 1;
+}
+
+.t-entry-readmore.btn-container a{
+    text-transform: none;
+    font-weight: 500 !important;
+    color: #62bb46;
+    font-size: 15px;
+    letter-spacing: normal;
+}
+
+/*Referenzen Navigation Bar Stylen*/
+.row-container.row-navigation.row-navigation-light{
+	outline-color: #303133;
+	background-color: #191b1e;
+}
+
+.row-container.row-navigation.row-navigation-light .row.row-parent.style-light{
+	padding: 27px 36px 27px 36px;
+}
+
+.row-container.row-navigation.row-navigation-light .row.row-parent.style-light a{
+	color: #FFFFFF !important;
+}
+
+/*sidebar on mobile on top*/
+@media (max-width: 959px) {
+	.portfolio-body .col-widgets-sidebar{
+		display: table-header-group !important;
+	}
+	
+	.portfolio-body .col-widgets-sidebar .double-bottom-padding{
+		padding-bottom: 18px;
+	}
+	
+	.portfolio-body .double-top-padding{
+		padding-top: 18px !important;
+	}
+	
+	.portfolio-body .no-bottom-padding{
+		padding-bottom: 24px !important;
+	}
+}
+/*checkmarks bei liste einfügen*/
+.info-content li::before {
+	content: "\e116  ";
+	font-family: 'uncodeicon' !important;
+}
+
+/*Fix Know How List second line margin*/
+ul.icons {
+	margin-left: 2.142857142857143em;
+	list-style-type: none;
+}
+
+ul.icons li{
+	position: relative;
+}
+
+ul.icons li .fa {
+	position: absolute;
+	left: -2.142857142857143em;
+	width: 2.142857142857143em;
+	text-align: center;
+	line-height: inherit;
+}
+
+/*Fix Single Portoflio Navigation on top*/
+.single-portfolio .row-navigation{
+	display: table-header-group!important;
+	padding-top: 0;
+	background-color: #5aa747 !important;
+}
+
+.single-portfolio .row-navigation nav.post-navigation{
+    padding-bottom: 3px !important;
+}
+
+/*FAQ Accordeon Font Fixes Add font-18px to accordeon*/
+.font-18px .panel-title > a{
+    margin-right: 18px;
+	text-transform: none;
+}
+
+.font-18px .panel-title > a > span::after{
+    margin-right: -18px;
+}
+
+.font-18px .panel-title > a > span {
+    font-size: 18px !important;
+}
+
+/*FAQ Accordeon no Uppercase*/
+.uncode-accordion .panel-title span{
+    text-transform: none !important;
+}
+
+/*
+ * 
+ * 
+ * Mobile Fixes
+ * 
+ * 
+ * 
+ * */
+
+/*fixes for tablets*/
+@media only screen and (min-width: 769px) and (max-width:1080px){
+	
+}
+
+@media only screen and (max-width: 960px) {
+	/*Mobile Menu bigger font-size for centered menu*/
+	body.menu-mobile-centered .main-menu-container .menu-horizontal .menu-horizontal-inner ul.menu-smart li.menu-item.menu-item-link > a{
+	   font-size: 6vw !important;
+	}
+	
+	/*Fix für Padding bei inverted device order*/
+	    .main-container .inverted-device-order .row-inner>div:first-child:not([class*=col-sm]) {
+        padding-top: 0 !important;
+    }
+	
+		/*Fix Menu on mobiles
+	.menu-horizontal{
+		overflow: visible;
+	}
+	
+	.menu-with-logo .menu-smart > li{
+		height: 200%;
+	}
+	*/
+}
+
+/*fixes for mobile*/
+@media only screen and (max-width: 768px) {
+    /*Icon Liste 3 Spalten nebeneinander*/
+	.DreiSpaltenListe ul.icons li {
+		width: 100%;
+	}
+	
+	/*hide Google Recaptcha v3*/
+	.grecaptcha-badge{
+		display: none;
+	}
+
+	/*contact form full width fields*/
+	.wpcf7-inline-wrapper .wpcf7-inline-field{
+		width: 100%;
+		padding: 0;
+	}
+	.wpcf7-inline-wrapper p{
+		margin: 18px 0px 0px 0px !important;
+	}
+	
+	/*min height für bilder die im spaltenhintergrund liegen*/
+	.min-height .uncoltable {
+    min-height:300px !important
+}
+
+}
