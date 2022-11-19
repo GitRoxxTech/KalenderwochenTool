@@ -21,7 +21,6 @@ const regionNamesInGerman = new Intl.DisplayNames(['de'], { type: 'region' });
 async function getCountries() {
     let countries = await $.get("https://date.nager.at/api/v3/AvailableCountries", {
     });
-    console.log(countries);
     for(const {countryCode, name} of countries.sort((a, b) => regionNamesInGerman.of(a.countryCode).localeCompare(regionNamesInGerman.of(b.countryCode)))) {
         addCountry(countryCode, name);
         var request = getDataSpectrum(-1, 1, countryCode);
@@ -55,10 +54,8 @@ function addCountry(code, name) {
         countiesData.get(code).set(key, name);
 
     if(getSelectedCountry() == code) {
+        updateCountryOptions();
         updateCountiesOptions();
-        var oldHash = location.hash;
-        location.hash = "";
-        location.hash = oldHash;
     }
 } 
 
@@ -178,9 +175,9 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
     $('#calendarWeeksYear').html(year);
     var table = document.getElementById("calendarWeeksTableBody");
 
+    console.log("test");
     // remove old values
     table.innerHTML = "";
-    console.log(!hasHolidayData(year-1) || !hasHolidayData(year) || !hasHolidayData(year+1));
     if(!hasHolidayData(year-1) || !hasHolidayData(year) || !hasHolidayData(year+1)) {
         $("#calendarLable").css("display", "none");
         await getDataSpectrum(-1, 1);
@@ -235,6 +232,7 @@ function updateCountryOptions() {
     var selectedCountry = getSelectedCountry();
     for(country of countiesData.keys())
         $('#'+country).toggleClass("style-accent-bg", country == selectedCountry);
+    $('#countryDropdownButton').html(regionNamesInGerman.of(location.hash.slice(1,3)));
 }
 
 function updateCountiesOptions() {
@@ -256,6 +254,7 @@ function updateCountiesOptions() {
         });
         $("#countiesOptions").append(option);
     });
+    $('#countyDropdownButton').html(!countiesData.has(location.hash.slice(1,3))||!countiesData.get(location.hash.slice(1,3)).has(location.hash.slice(1))?'NATIONAL':countiesData.get(location.hash.slice(1,3)).get(location.hash.slice(1)));
 }
 
 function getWorkDaysBrutto(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
@@ -307,9 +306,11 @@ function setResultInfos(startDate = new Date($('#startDate').val()), endDate = n
     $("#workDaysResult").css("display", "");    
 }
 
-function clearResultInfos(clearStart = false, clearEnd = false) {
-    $("#workDaysSpinner").css("display", "");
-    $("#workDaysResult").css("display", "none");
+function clearResultInfos(clearStart = false, clearEnd = false, spinner = true) {
+    if(spinner) {
+        $("#workDaysSpinner").css("display", "");
+        $("#workDaysResult").css("display", "none");
+    }
 
     if(clearStart === true) {
         $('#startDate').val(null);
@@ -381,8 +382,8 @@ async function getDate(isNetto=true, startDate = new Date($('#startDate').val())
 }
 
 async function getWorkDays(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
-    if(isNaN(startDate)) return;
-    if(isNaN(endDate)) return;
+    if(isNaN(startDate)) return clearResultInfos(false, false, false);
+    if(isNaN(endDate)) return clearResultInfos(false, false, false);
 
     clearResultInfos();
     setWeekInfos();
@@ -396,7 +397,7 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
 
         // check if holiday
         const holiday = await isHoliday(date); 
-        if(holiday) {console.log(holiday); holidays.push(holiday); continue; }
+        if(holiday) { holidays.push(holiday); continue; }
 
         // check if sunday
         if(date.getDay() === 0) continue;
@@ -469,7 +470,7 @@ $(async function() {
     $('#saturdaySwitch').change(() => {getWorkDays()});
 
     $('#countrySelection').change(() => {getWorkDays(); updateCalendarWeeksTable()});
-    $( window ).on( 'hashchange', () => {localStorage.setItem("hash", location.hash); getWorkDays(); updateCalendarWeeksTable(); $('#countryDropdownButton').html(regionNamesInGerman.of(location.hash.slice(1,3)));$('#countyDropdownButton').html(!countiesData.has(location.hash.slice(1,3))||!countiesData.get(location.hash.slice(1,3)).has(location.hash.slice(1))?'NATIONAL':countiesData.get(location.hash.slice(1,3)).get(location.hash.slice(1))); updateCountryOptions(); updateCountiesOptions(); getDataSpectrum(-2, 5);});
+    $( window ).on( 'hashchange', () => {localStorage.setItem("hash", location.hash); getWorkDays(); updateCalendarWeeksTable(); updateCountryOptions(); updateCountiesOptions(); getDataSpectrum(-2, 5);});
 
     onClickOutside($("#countryDropdownButton"), function() { if($("#countryDropdown").is(':visible') &&  !document.activeElement.classList.contains("search")) $("#countryDropdown").toggleClass("show"); });
     onClickOutside($("#countyDropdownButton"), function() { if($("#countyDropdown").is(':visible') && !document.activeElement.classList.contains("search")) $("#countyDropdown").toggleClass("show"); });
