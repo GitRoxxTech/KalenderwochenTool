@@ -3,7 +3,6 @@ function onClickOutside(selector, func) {
       const $target = $(event.target);
       if (!$target.closest(selector).length && $(selector).is(':visible')) {
           func();
-        //   removeClickListener();
       }
     }
   
@@ -15,13 +14,15 @@ function onClickOutside(selector, func) {
 }
 
 const holidayData = new Map();
-const holidayData2 = new Map();
 const countiesData = new Map();
+
+const regionNamesInGerman = new Intl.DisplayNames(['de'], { type: 'region' });
 
 async function getCountries() {
     let countries = await $.get("https://date.nager.at/api/v3/AvailableCountries", {
     });
-    for(const {countryCode, name} of countries) {
+    console.log(countries);
+    for(const {countryCode, name} of countries.sort((a, b) => regionNamesInGerman.of(a.countryCode).localeCompare(regionNamesInGerman.of(b.countryCode)))) {
         addCountry(countryCode, name);
         var request = getDataSpectrum(-1, 1, countryCode);
         // if(countryCode == getSelectedCountry()) await request;
@@ -38,88 +39,59 @@ async function getDataSpectrum(before, after, countryCode = getSelectedCountry()
 }
 
 function addCountry(code, name) {
-    countiesData.set(code, new Array());
-        var option = $('<a></a>', {
-            class: 'list-group-item list-group-item-action',
-            href: '#'+code,
-           
-            text: name,
-        });
-      
-        var countyoptions = $('<div></div>', {
-            id: code,
-        }).append($('<a></a>', {
-            class: 'list-group-item list-group-item-action',
-            href: '#'+code,
-            html: $('<h4></h4>', {
-                text: name,
-            })
-        }));
-        $("#countryOption").append(option);
-        $("#countiesOption").append(countyoptions);
-        $("#countryDropdown").append(option);
+    countiesData.set(code, new Map());
+    var option = $('<a></a>', {
+        class: 'list-group-item list-group-item-action',
+        id: code,
+        href: '#'+code,
+        text: regionNamesInGerman.of(code),
+    });
+    
+    if($("#"+code).length == 0) $("#countryOptions").append(option);
+
+    const counties = new Map(Object.entries(iso3166.country(code).sub).sort(([code1, a], [code2, b]) => a.name.localeCompare(b.name)));
+
+    for([key, {name}] of counties)
+        countiesData.get(code).set(key, name);
+
+    if(getSelectedCountry() == code) {
+        updateCountiesOptions();
+        var oldHash = location.hash;
+        location.hash = "";
+        location.hash = oldHash;
+    }
 } 
 
 async function getHolidayData(year, country = getSelectedCountry()) {
     if(isNaN(year)) return;
-    if(holidayData2.has(country) && holidayData2.get(country).has(year)) return;
+    if(holidayData.has(country) && holidayData.get(country).has(year)) return;
 
-    // get raw data
-    let rawData = await $.get("https://feiertage-api.de/api/", {
-        'jahr': year,
-    })
-
-    let testData = await $.get("https://date.nager.at/api/v3/publicholidays/"+year+"/"+country, {
-    })
-
-    // transform data format
-    let data = new Map()
-    Object.entries(rawData).forEach(([bundesLand, holidays]) => {data.set(bundesLand, Object.values(holidays).map(holiday => new Date(holiday.datum)));});
+    let data = await $.get("https://date.nager.at/api/v3/publicholidays/"+year+"/"+country, {});
     
-    if(!holidayData2.has(country)) holidayData2.set(country, new Map());
-    holidayData2.get(country).set(year, testData);
+    if(!holidayData.has(country)) holidayData.set(country, new Map());
+    holidayData.get(country).set(year, data);
 
     // check new counties
     if(!countiesData.has(country)) addCountry(country, country);
 
-    for(const {counties} of testData) {
+    // add county to list if not yet existing
+    for(const {counties} of data) {
         if(counties == null) continue;
 
         for(const county of counties) {
-            // add county to list if not yet existing
-            if(countiesData.get(country).includes(county)) continue;
-            countiesData.get(country).push(county);
-
-            var countyOption = $('<a></a>', {
-                class: 'nav-link ms-3 my-1',
-                href: '#'+county,
-                text: county,
-            })
-           
-            $('[id="'+country+'"]:last').append(countyOption);
-            // await updateCountrySelection(country);
+            if(countiesData.get(country).has(county)) continue;
+                countiesData.get(country).set(county, county);
 
             if(country == getSelectedCountry()) updateCountiesOptions();
         }
     }
-
-    // TODO update display
-
-    // for(const county of countiesData.get(country))
-        // console.log(county);
-
-    // console.log(holidayData);
-    // console.log(holidayData2);
-    
-    // store data
-    holidayData.set(year, data);
 }
 
 function hasHolidayData(year) {
     var county = location.hash.slice(1);
     var country = county.slice(0, 2);
-    if(!holidayData2.has(country)) return false;
-    if(!holidayData2.get(country).has(year)) return false;
+    if(!holidayData.has(country)) return false;
+    if(!holidayData.get(country).has(year)) return false;
     if(!countiesData.has(country)) return false;
     return true;
 }
@@ -186,25 +158,18 @@ function getValidYear(year) {
 async function isHoliday(dates = new Date()) {
     dates.setHours(0,0,0,0); // match time format
 
-    // check if year data exists
     const year = dates.getFullYear();
-    if(!holidayData.has(year)) await getHolidayData(year);
 
     // check if county exists
-    // var county = $('#countrySelection').val();
     var county = location.hash.slice(1);
     var country = county.slice(0, 2);
-    if(!holidayData2.has(country)) await getHolidayData(year);
-    if(!holidayData2.get(country).has(year)) await getHolidayData(year);
+    if(!holidayData.has(country)) await getHolidayData(year);
+    if(!holidayData.get(country).has(year)) await getHolidayData(year);
     if(!countiesData.has(country)) await getHolidayData(year);
-    if(!countiesData.get(country).includes(county)) county = country+'-NATIONAL';
+    if(!countiesData.get(country).has(county)) county = country+'-NATIONAL';
 
-    // console.log(county);
-    // var result = holidayData.get(year).get(county.slice(3)).some(holiday => +holiday.setHours(0) === +dates);
-    var result2 = holidayData2.get(country).get(year).some(({date, global, counties}) => (global===true || counties.some(_county => _county === county))  &&+new Date(date).setHours(0) === +dates);
-// if(result != result2) console.log(dates);
-    // check if date is holiday
-    return result2;
+    const result = holidayData.get(country).get(year).find(({date, global, counties, launchYear, localName, name}) => (global===true || counties.some(_county => _county === county))  && +new Date(date).setHours(0) === +dates && launchYear <= year);
+    return result;
 }
 
 async function updateCalendarWeeksTable(year = getSelectedYear()) {
@@ -214,7 +179,6 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
     var table = document.getElementById("calendarWeeksTableBody");
 
     // remove old values
-    // Array.from(table.rows).forEach((row, index) => index > 1 && row.remove());
     table.innerHTML = "";
     console.log(!hasHolidayData(year-1) || !hasHolidayData(year) || !hasHolidayData(year+1));
     if(!hasHolidayData(year-1) || !hasHolidayData(year) || !hasHolidayData(year+1)) {
@@ -243,23 +207,8 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
         if(date.getFullYear() != year) {cell.classList.add("bg-lightgray"); }
         else if(date.getDay() === 0 ) {cell.classList.add("style-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
         else if(date.getDay() === 6) {cell.classList.add("style-light-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
-        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("text-danger"); cell.classList.add("border"); cell.classList.add("border-danger");}
+        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("holidayMark");}
     }
-}
-
-async function updateCountrySelection(country) {
-    // var country = $('#countrySelection').val().slice(0, 2);
-    if(!countiesData.has(country)) await getHolidayData(year);
-
-    // let optgroup = $('#OPTION-'+country);
-    // optgroup.label("country")
-    // for(const county of countiesData.get(country)) {
-    //     var opt = document.createElement('option');
-    //     opt.value = county;
-    //     opt.innerHTML = county;
-    //     optgroup.append(opt);
-    //     // opt.appendTo('#countrySelection');
-    // }
 }
 
 function showDropdown(id) {
@@ -282,11 +231,16 @@ function filterFunction(divId, searchId) {
     }
 }
 
+function updateCountryOptions() {
+    var selectedCountry = getSelectedCountry();
+    for(country of countiesData.keys())
+        $('#'+country).toggleClass("style-accent-bg", country == selectedCountry);
+}
+
 function updateCountiesOptions() {
     var country = getSelectedCountry();
     if(!countiesData.get(country)) return;
-    var counties = countiesData.get(country);
-    console.log(getSelectedCounty());
+
     $("#countiesOptions").html("");
     $("#countiesOptions").append($('<a></a>', {
         class: 'list-group-item list-group-item-action '+(getSelectedCounty()===country?"style-accent-bg":''),
@@ -294,11 +248,11 @@ function updateCountiesOptions() {
         text: "National",
     }));
 
-    counties.forEach((county) => {
+    countiesData.get(country).forEach((name, code) => {
         var option = $('<a></a>', {
-            class: 'list-group-item list-group-item-action '+(getSelectedCounty()===county?"style-accent-bg":''),
-            href: '#'+county,
-            text: county,
+            class: 'list-group-item list-group-item-action '+(getSelectedCounty()===code?"style-accent-bg":''),
+            href: '#'+code,
+            text: name,
         });
         $("#countiesOptions").append(option);
     });
@@ -307,6 +261,7 @@ function updateCountiesOptions() {
 function getWorkDaysBrutto(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
     if(isNaN(startDate)) return;
     if(isNaN(endDate)) return;
+
     startDate.setHours(0,0,0,0);
     endDate.setHours(0,0,0,0);
 
@@ -346,7 +301,6 @@ function setResultInfos(startDate = new Date($('#startDate').val()), endDate = n
     $('#saturdays').html(saturdays.length);
     $('#sundays').html(sundays.length);
     $('#weekends').html(Math.max(saturdays.length, sundays.length)+(sundays[0].getDate()<saturdays[0].getDate()?1:0));
-    // $('#holidays').html(days.length-$('#workDaysNetto').val());
     $('#calendarWeeks').html((Math.round(differenceDays/7*1000)/1000).toString().replace('.', ','));
 
     $("#workDaysSpinner").css("display", "none");
@@ -411,20 +365,19 @@ async function getDate(isNetto=true, startDate = new Date($('#startDate').val())
     for(var date = new Date(isStart?endDate:startDate), currentWorkDays = 0; currentWorkDays < workDays; date.setDate(date.getDate()+(isStart?-1:1))) {
         // check if sunday
         if(date.getDay() === 0) continue;
-        if(date.getDay() === 1 && !$("#saturdaySwitch").is(":checked")) continue;
+        if(date.getDay() === 6 && !$("#saturdaySwitch").is(":checked")) continue;
         if(isNetto && await isHoliday(date)) continue;
         currentWorkDays++;
     }
     date.setDate(date.getDate()-(isStart?-1:1));
 
     var month = ('0'+(date.getMonth()+1)).slice(-2);
-    var day = ('0'+date.getDate()).slice(-2);
+    var day = ('0'+(date.getDate())).slice(-2);
     var dateString = date.getFullYear()+'-'+month+'-'+day;
 
     $(isStart?'#startDate':'#endDate').val(dateString);
-    if(!isNetto) return getWorkDays();
-    setWeekInfos();
-    setResultInfos();
+    
+    getWorkDays();
 }
 
 async function getWorkDays(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
@@ -435,14 +388,15 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
     setWeekInfos();
 
     var workDays = 0;
-    var holidays = [];
+    var holidays = new Array();
 
     // check all days in between
     for(var date = new Date(startDate); date <= endDate; date.setDate(date.getDate()+1)) {
         // console.log(date);
 
         // check if holiday
-        if(await isHoliday(date)) { holidays.push(date); continue; }
+        const holiday = await isHoliday(date); 
+        if(holiday) {console.log(holiday); holidays.push(holiday); continue; }
 
         // check if sunday
         if(date.getDay() === 0) continue;
@@ -455,13 +409,13 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
     }
 
     $('#holidayList').html("");
-
-    for(holiday of holidays) {
-        var entry = $('<tr></tr>', {
-            
-        })
-        entry.append($('<th></th>', {text: holiday.toLocaleDateString()}));
-        entry.append($('<td></td>', {text: "Feiertag xy"}));
+    for({date, countryCode, localName, name, launchYear, global, counties} of holidays) {
+        var entry = $('<tr></tr>', {});
+        entry.append($('<th></th>', {text: new Date(date).toLocaleDateString()}));
+        entry.append($('<td></td>', {text: localName}));
+        entry.append($('<td></td>', {text: name}));
+        entry.append($('<td></td>', {text: global?'global' : counties.join(', ').replaceAll(countryCode+'-', '')}));
+        entry.append($('<td></td>', {text: launchYear ? launchYear : '-'}));
         $('#holidayList').append(entry);
     }
 
@@ -483,10 +437,8 @@ $(async function() {
     console.log(new Date(endTime-startTime).getTime());
     startTime = new Date();
 
-    const scrollSpy = new bootstrap.ScrollSpy($("#countiesOption"), {
-        target: '#countryOption'
-      })
-    location.hash = 'DE-BW';
+
+    location.hash = localStorage.getItem('hash') || 'DE-BW';
     console.log("countries received");
 
     // get calendar week
@@ -517,12 +469,12 @@ $(async function() {
     $('#saturdaySwitch').change(() => {getWorkDays()});
 
     $('#countrySelection').change(() => {getWorkDays(); updateCalendarWeeksTable()});
-    $( window ).on( 'hashchange', () => {getWorkDays(); updateCalendarWeeksTable(); $('#countrySelectionButton').html(location.hash.slice(1)); updateCountiesOptions(); getDataSpectrum(-2, 5);});
+    $( window ).on( 'hashchange', () => {localStorage.setItem("hash", location.hash); getWorkDays(); updateCalendarWeeksTable(); $('#countryDropdownButton').html(regionNamesInGerman.of(location.hash.slice(1,3)));$('#countyDropdownButton').html(!countiesData.has(location.hash.slice(1,3))||!countiesData.get(location.hash.slice(1,3)).has(location.hash.slice(1))?'NATIONAL':countiesData.get(location.hash.slice(1,3)).get(location.hash.slice(1))); updateCountryOptions(); updateCountiesOptions(); getDataSpectrum(-2, 5);});
 
     onClickOutside($("#countryDropdownButton"), function() { if($("#countryDropdown").is(':visible') &&  !document.activeElement.classList.contains("search")) $("#countryDropdown").toggleClass("show"); });
     onClickOutside($("#countyDropdownButton"), function() { if($("#countyDropdown").is(':visible') && !document.activeElement.classList.contains("search")) $("#countyDropdown").toggleClass("show"); });
-
-    $('#holidayLable').click(function() {console.log("test"); $("#holidayListToggle").toggleClass("hide");});
+    onClickOutside($("#workDaysResult"), function() { $("#holidayListToggle").toggleClass("hide", true); });
+    $('#holidayLable').click(function() {$("#holidayListToggle").toggleClass("hide");});
     endTime = new Date();
     console.log(new Date(endTime-startTime).getTime());
 })

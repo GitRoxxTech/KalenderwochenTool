@@ -1,24 +1,10 @@
-* {
-    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif */
-}
-
-p {
-    /* display: inline; */
-}
-
 #currentWeek, #calendarDays, #workDaysBrutto, #workDaysNetto, #calendarWeeks, #startDay, #endDay, #startWeek, #endWeek, #saturdays, #sundays, #weekends, #holidays  {
     text-align: center;
 }
 
 #workDaysNetto, #workDaysBrutto, #calendarDays, #saturdays, #sundays, #weekends, #holidays {
     width: 100%;
-    padding: 0;
 }
-
-/* table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-} */
 
 .style-light-accent-bg {
     background-color: #5aa747;
@@ -33,13 +19,28 @@ th {
     background-color: lightgray;
 }
 
-.text-red {
+.holidayMark {
+    border: 1px solid red !important;
     color: red;
 }
 
 #calendarTable {
-    /* position: relative; */
-    max-height: 85vh;
+    max-height: 87vh;
+    overflow: auto;
+}
+
+#workdaysCalculationTable {
+    max-height: 80vh;
+    overflow: auto;
+}
+
+#countryOption {
+    height: calc(100vh - 12em);
+    overflow: auto;
+}
+
+#holidayTable {
+    max-height: calc(100vh - 30em);
     overflow: auto;
 }
 
@@ -52,27 +53,6 @@ th {
     padding-left: 30px;
     padding-right: 30px;
     border-right: 1px solid black;
-}
-
-.scrollspy-example {
-   
-    height: calc(100vh - 12em);
-    overflow: auto;
-}
-
-#countryOption {
-  
-    height: calc(100vh - 12em);
-    overflow: auto;
-}
-
-#holidayList {
-    max-height: calc(100vh - 50em);
-    overflow: auto;
-}
-
-.modal-body {
-    height: calc(100vh - 12em);
 }
 
  /* Dropdown Button */
@@ -92,14 +72,7 @@ th {
   
   /* The search field */
   .search {
-    box-sizing: border-box;
-    background-image: url('searchicon.png');
-    background-position: 14px 12px;
-    background-repeat: no-repeat;
-    font-size: 16px;
-    padding: 14px 20px 12px 45px;
-    border: none;
-    border-bottom: 1px solid #ddd;
+    padding: 14px 20px 12px 12px;
   }
   
   /* The search field when it gets focus/clicked on */
@@ -137,14 +110,7 @@ th {
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
   .show {display:block;} 
 
-  .hide { display: none;}
-
-  .switch.success-switch label input[type=checkbox]:checked + .lever {
-    background-color: #5aa747;
-  }
-  .switch.success-switch label input[type=checkbox]:checked + .lever:after {
-    background-color: #00C851;
-  }
+  .hide { display: none; visibility: hidden;}
 
   #saturdaySwitch {
     transform: scale(1.8);
