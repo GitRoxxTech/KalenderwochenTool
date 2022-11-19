@@ -260,6 +260,13 @@ function updateCountiesOptions() {
 function getWorkDaysBrutto(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
     if(isNaN(startDate)) return;
     if(isNaN(endDate)) return;
+    if(+endDate < +startDate) {
+        let temp = new Date(endDate);
+        endDate = new Date(startDate);
+        startDate = temp;
+        setDate(true, new Date(startDate));
+        setTimeout(function() { setDate(false, endDate);}, 1);
+    }
 
     startDate.setHours(0,0,0,0);
     endDate.setHours(0,0,0,0);
@@ -299,7 +306,7 @@ function setResultInfos(startDate = new Date($('#startDate').val()), endDate = n
     $('#workDaysBrutto').val(days.length);
     $('#saturdays').html(saturdays.length);
     $('#sundays').html(sundays.length);
-    $('#weekends').html(Math.max(saturdays.length, sundays.length)+(sundays[0].getDate()<saturdays[0].getDate()?1:0));
+    $('#weekends').html(Math.max(saturdays.length, sundays.length)+(saturdays.length>0&&sundays.length>0&&sundays[0].getDate()<saturdays[0].getDate()?1:0));
     $('#calendarWeeks').html((Math.round(differenceDays/7*1000)/1000).toString().replace('.', ','));
 
     $("#workDaysSpinner").css("display", "none");
@@ -352,6 +359,14 @@ function getDateFromKalanderDays(startDate = new Date($('#startDate').val()), en
     getWorkDays();
 }
 
+function setDate(isStart, date) {
+    if(!date) return $(isStart?'#startDate':'#endDate').val(null);
+    var month = ('0'+(date.getMonth()+1)).slice(-2);
+    var day = ('0'+(date.getDate())).slice(-2);
+    var dateString = date.getFullYear()+'-'+month+'-'+day;
+    $(isStart?'#startDate':'#endDate').val(dateString);
+}
+
 async function getDate(isNetto=true, startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val()), workDays = parseInt($('#workDaysNetto').val())) {
     if(!isNetto) workDays = parseInt($('#workDaysBrutto').val());
     if(isNaN(workDays)) return;
@@ -372,11 +387,7 @@ async function getDate(isNetto=true, startDate = new Date($('#startDate').val())
     }
     date.setDate(date.getDate()-(isStart?-1:1));
 
-    var month = ('0'+(date.getMonth()+1)).slice(-2);
-    var day = ('0'+(date.getDate())).slice(-2);
-    var dateString = date.getFullYear()+'-'+month+'-'+day;
-
-    $(isStart?'#startDate':'#endDate').val(dateString);
+    setDate(isStart, date);
     
     getWorkDays();
 }
@@ -384,6 +395,13 @@ async function getDate(isNetto=true, startDate = new Date($('#startDate').val())
 async function getWorkDays(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val())) {
     if(isNaN(startDate)) return clearResultInfos(false, false, false);
     if(isNaN(endDate)) return clearResultInfos(false, false, false);
+    if(+endDate < +startDate) {
+        let temp = new Date(endDate);
+        endDate = new Date(startDate);
+        startDate = temp;
+        setDate(true, new Date(startDate));
+        setTimeout(function() { setDate(false, endDate);}, 1);
+    }
 
     clearResultInfos();
     setWeekInfos();
@@ -463,7 +481,7 @@ $(async function() {
     startTime = new Date();
 
     // set work day listener
-    $('#startDate, #endDate').change(() => getWorkDays());
+    $('#startDate, #endDate').change(async() => await getWorkDays());
     $('#calendarDays').change(() => {getDateFromKalanderDays()});
     $('#workDaysNetto').change(() => {getDate()});
     $('#workDaysBrutto').change(() => {getDate(false)});
