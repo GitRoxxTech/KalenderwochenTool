@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">    
-        <title>Kalender Wochen Tool</title>
         <meta name="description" content="Kalender Wochen Tool">
-        <meta name="keywords" content="calendar week tool">
+        <meta name="keywords" content="current calendar week, calendar week, calculation tool, workdays, Roxxtech, Kalenderwochen, Berechnungstool, Arbeitstage, aktuelle Kalenderwoche, Arbeitstagerechner">
+        <title>Kalender Wochen Tool</title>
         <!-- JQUERY -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- CUSTOM -->
@@ -33,9 +33,9 @@
                         <tr>
                             <th colspan="8">
                                 <div class="m-2 d-flex justify-content-between">
-                                    <button type="button" class="btn" id="lastYearButton"><< vorheriges</button>
+                                    <button type="button" class="btn" id="lastYearButton"><< vorheriges Jahr</button>
                                     <input type="number" min="1900" max="2099" step="1" onkeypress="return onlyNumberKey(event)" class="form-control d-inline w-auto" id="yearInput">
-                                    <button type="button" class="btn" id="nextYearButton">nächstes >></button>
+                                    <button type="button" class="btn" id="nextYearButton">nächstes Jahr >></button>
                                 </div>
                             </th>
                         </tr>
@@ -195,7 +195,7 @@
                             <td colspan="2"><input type="number" class="form-control" placeholder="Arbeitstage brutto eingeben" id="workDaysBrutto" onkeypress="return onlyNumberKey(event)"></td>
                         </tr>
                         <tr class="border-success">
-                            <th scope="row" id="holidayLable">Feiertage</th>
+                            <th scope="row" id="holidayLable">Feiertage ></th>
                             <td colspan="2" id="holidays"></td>
                         </tr>
                         <tr id="holidayListToggle" class="hide border-success">

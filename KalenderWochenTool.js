@@ -339,6 +339,9 @@ function clearResultInfos(clearStart = false, clearEnd = false, spinner = true) 
     $('#weekends').html(null);
     $('#holidays').html(null);
     $('#calendarWeeks').html(null);
+    $('#holidayList').html("");
+    $("#holidayListToggle").toggleClass("hide", true);
+    $('#holidayLable').html($('#holidayLable').html().slice(0,10)+">");
 }
 
 function getDateFromKalanderDays(startDate = new Date($('#startDate').val()), endDate = new Date($('#endDate').val()), days = parseInt($('#calendarDays').val())) {
@@ -396,6 +399,7 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
     if(isNaN(startDate)) return clearResultInfos(false, false, false);
     if(isNaN(endDate)) return clearResultInfos(false, false, false);
     if(+endDate < +startDate) {
+        if(endDate.getFullYear() < 1000) return;
         let temp = new Date(endDate);
         endDate = new Date(startDate);
         startDate = temp;
@@ -437,7 +441,9 @@ async function getWorkDays(startDate = new Date($('#startDate').val()), endDate 
         entry.append($('<td></td>', {text: launchYear ? launchYear : '-'}));
         $('#holidayList').append(entry);
     }
-
+    $("#holidayListToggle").toggleClass("hide", false);
+    $('#holidayLable').html($('#holidayLable').html().slice(0,10)+"V");
+  
     $('#workDaysNetto').val(workDays);
     $('#holidays').html(holidays.length);
     setResultInfos();
@@ -492,8 +498,8 @@ $(async function() {
 
     onClickOutside($("#countryDropdownButton"), function() { if($("#countryDropdown").is(':visible') &&  !document.activeElement.classList.contains("search")) $("#countryDropdown").toggleClass("show"); });
     onClickOutside($("#countyDropdownButton"), function() { if($("#countyDropdown").is(':visible') && !document.activeElement.classList.contains("search")) $("#countyDropdown").toggleClass("show"); });
-    onClickOutside($("#workDaysResult"), function() { $("#holidayListToggle").toggleClass("hide", true); });
-    $('#holidayLable').click(function() {$("#holidayListToggle").toggleClass("hide");});
+    onClickOutside($("#workDaysResult"), function() { $("#holidayListToggle").toggleClass("hide", true); $('#holidayLable').html($('#holidayLable').html().slice(0,10)+($('#holidayListToggle').hasClass('hide')?'>':'V')); });
+    $('#holidayLable').click(function() {$("#holidayListToggle").toggleClass("hide"); $('#holidayLable').html($('#holidayLable').html().slice(0,10)+($('#holidayListToggle').hasClass('hide')?'>':'V'));});
     endTime = new Date();
     console.log(new Date(endTime-startTime).getTime());
 })
