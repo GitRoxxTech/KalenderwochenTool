@@ -175,7 +175,6 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
     $('#calendarWeeksYear').html(year);
     var table = document.getElementById("calendarWeeksTableBody");
 
-    console.log("test");
     // remove old values
     table.innerHTML = "";
     if(!hasHolidayData(year-1) || !hasHolidayData(year) || !hasHolidayData(year+1)) {
@@ -204,7 +203,7 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
         if(date.getFullYear() != year) {cell.classList.add("bg-lightgray"); }
         else if(date.getDay() === 0 ) {cell.classList.add("style-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
         else if(date.getDay() === 6) {cell.classList.add("style-light-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
-        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("holidayMark"); console.log((await isHoliday(date)).localName);
+        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("holidayMark");
         cell.setAttribute("data-bs-toggle", "tooltip"); cell.setAttribute("data-bs-placement", "top"); cell.setAttribute("data-bs-title", (await isHoliday(date)).localName); }
     }
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -458,16 +457,14 @@ $(async function() {
     var startTime = new Date();
     // getDataSpectrum(-2, 5);
     var endTime = new Date();
-    console.log(new Date(endTime-startTime).getTime());
     startTime = new Date();
     getCountries();
     var endTime = new Date();
-    console.log(new Date(endTime-startTime).getTime());
     startTime = new Date();
 
 
     location.hash = localStorage.getItem('hash') || 'DE-BW';
-    console.log("countries received");
+    // console.log("countries received");
 
     // get calendar week
     const currentYear = new Date().getFullYear();
@@ -480,13 +477,11 @@ $(async function() {
     $('#nextYearButton').click(() => { $('#yearInput').val(getSelectedYear()+1); updateCalendarWeeksTable(); getDataSpectrum(-2, 5); });
     $('#yearInput').change(() =>     { $('#yearInput').val(getSelectedYear());   updateCalendarWeeksTable(); getDataSpectrum(-2, 5); });
     endTime = new Date();
-    console.log(new Date(endTime-startTime).getTime());
     startTime = new Date();
 
     // get work days
     getWorkDays();
     endTime = new Date();
-    console.log(new Date(endTime-startTime).getTime());
     startTime = new Date();
 
     // set work day listener
@@ -504,10 +499,6 @@ $(async function() {
     onClickOutside($("#workDaysResult"), function() { $("#holidayListToggle").toggleClass("hide", true); $('#holidayLable').html($('#holidayLable').html().slice(0,10)+($('#holidayListToggle').hasClass('hide')?'>':'V')); });
     $('#holidayLable').click(function() {$("#holidayListToggle").toggleClass("hide"); $('#holidayLable').html($('#holidayLable').html().slice(0,10)+($('#holidayListToggle').hasClass('hide')?'>':'V'));});
     endTime = new Date();
-    console.log(new Date(endTime-startTime).getTime());
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    const tooltip = new bootstrap.Tooltip('#example', {
-        boundary: document.body // or document.querySelector('#boundary')
-      })      
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));    
 })
