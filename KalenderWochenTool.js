@@ -204,8 +204,11 @@ async function updateCalendarWeeksTable(year = getSelectedYear()) {
         if(date.getFullYear() != year) {cell.classList.add("bg-lightgray"); }
         else if(date.getDay() === 0 ) {cell.classList.add("style-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
         else if(date.getDay() === 6) {cell.classList.add("style-light-accent-bg"); cell.classList.add("border"); cell.classList.add("text-white");}
-        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("holidayMark");}
+        if(await isHoliday(date)) {cell.classList.remove("text-white"); cell.classList.add("holidayMark"); console.log((await isHoliday(date)).localName);
+        cell.setAttribute("data-bs-toggle", "tooltip"); cell.setAttribute("data-bs-placement", "top"); cell.setAttribute("data-bs-title", (await isHoliday(date)).localName); }
     }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, { boundary: document.body, container: '#calendarWeeksTableBody' }));
 }
 
 function showDropdown(id) {
@@ -502,4 +505,9 @@ $(async function() {
     $('#holidayLable').click(function() {$("#holidayListToggle").toggleClass("hide"); $('#holidayLable').html($('#holidayLable').html().slice(0,10)+($('#holidayListToggle').hasClass('hide')?'>':'V'));});
     endTime = new Date();
     console.log(new Date(endTime-startTime).getTime());
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    const tooltip = new bootstrap.Tooltip('#example', {
+        boundary: document.body // or document.querySelector('#boundary')
+      })      
 })

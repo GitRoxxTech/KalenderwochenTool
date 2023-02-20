@@ -24,14 +24,33 @@ th {
     color: red;
 }
 
+#calendar {
+  max-height: 100vh;
+  padding-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
 #calendarTable {
-    max-height: 87vh;
-    overflow: auto;
+  flex: 0 1 auto;
+  overflow: auto;
+}
+
+#workdayTool {
+  max-height: 100vh;
+  padding-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+#workdayTool div {
+  max-width: 90%;
 }
 
 #workdaysCalculationTable {
-    max-height: 80vh;
-    overflow: auto;
+  width: 100%;
+  flex: 0 1 auto;
+  overflow: auto;
 }
 
 #countryOption {
@@ -45,14 +64,108 @@ th {
 }
 
 .calendarTableCell {
-    padding-left: 20px;
-    padding-right: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .calendarTableWeekCell {
-    padding-left: 30px;
-    padding-right: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
     border-right: 1px solid black;
+}
+
+@media only screen and (max-width: 768px) {
+  #calendar, #workdayTool {
+    padding-right: 0px;
+    padding-left: 5vw;
+  }
+
+  #calendar h3 {
+    margin: 0.5em !important;
+    margin-bottom: 0 !important;
+  }
+
+  .calendarTableCell {
+    max-width: 13vw !important;
+    padding: 0px;
+    padding-left: calc(7vw - 3ch);
+  }
+
+  .calendarTableWeekCell {
+    padding: 0px;
+  }
+
+  #yearInput {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: fit-content;
+    max-width: min-content !important;
+    min-width: 10ch !important;
+    /* width: 70% !important; */
+  }
+
+  #lastYearButton, #nextYearButton {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  #calendarTableHeader th h5 {
+    margin-bottom: 0;
+  }
+
+  #workdaysCalculationTable {
+    max-width: 100% !important;
+  }
+
+  #workdaysCalculationTable table tbody tr th {
+    padding: 5px 0% !important;
+    word-wrap: break-word !important;
+    word-break: break-word;
+    min-width: 22vw !important;
+  }
+} 
+
+@media only screen and (max-width: 412px) {
+  #calendar h3 {
+    font-size: 1.4em !important;
+  }
+
+  #yearInput {
+    /* width: 70% !important; */
+  }
+
+  #calendarTableHeader th h5 {
+    font-size: 1em !important;
+  }
+
+  .btn {
+    padding: 2% !important;
+    /* max-width: 10%; */
+  }
+
+  #workdayTool div {
+    margin: 0 !important;
+  }
+
+  #saturdayLable h5 {
+    font-size: small !important;
+  }
+
+  #startDate, #endDate, #workDaysNetto, #workDaysBrutto, #calendarDays {
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 0.9em !important;
+  }
+
+  #workdaysCalculationTable table tbody tr th, td {
+    padding: 0 !important;
+    min-height: 1.7em !important;
+  }
+
+  #workdayCalculationTable table input {
+    font-size: 0.1em !important;
+  }
 }
 
  /* Dropdown Button */

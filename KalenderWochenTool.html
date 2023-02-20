@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">    
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">    
         <meta name="description" content="Kalender Wochen Tool">
         <meta name="keywords" content="current calendar week, calendar week, calculation tool, workdays, Roxxtech, Kalenderwochen, Berechnungstool, Arbeitstage, aktuelle Kalenderwoche, Arbeitstagerechner">
         <title>Kalender Wochen Tool</title>
@@ -20,9 +20,9 @@
         <link rel="stylesheet" href="KalenderWochenTool.css">
     </head>
 
-    <body class="row p-2">
+    <body class="row" style="max-width: 100vw;">
         <!-- Calendar -->
-        <div class="col-5">
+        <div class="col-auto" id="calendar">
             <h3 class="text-accent-color my-3 mx-4">
                 Aktuelle Kalenderwoche: <span id="currentWeek"></span>
             </h3>
@@ -32,14 +32,14 @@
                         <!-- Year Selection -->
                         <tr>
                             <th colspan="8">
-                                <div class="m-2 d-flex justify-content-between">
+                                <div class="d-flex justify-content-between" style="max-width: 90vw;">
                                     <button type="button" class="btn" id="lastYearButton"><< vorheriges Jahr</button>
                                     <input type="number" min="1900" max="2099" step="1" onkeypress="return onlyNumberKey(event)" class="form-control d-inline w-auto" id="yearInput">
                                     <button type="button" class="btn" id="nextYearButton">nächstes Jahr >></button>
                                 </div>
                             </th>
                         </tr>
-                        <tr><th colspan="8"><h5 class="text-accent-color text-uppercase">Kalender Wochen <span id="calendarWeeksYear"></span></h5></th></tr>
+                        <tr id="calendarTableHeader"><th colspan="8"><h5 class="text-accent-color text-uppercase">Kalender Wochen <span id="calendarWeeksYear"></span></h5></th></tr>
                         <!-- Spinner -->
                         <tr id="loadingSpinner">
                             <td colspan="8">
@@ -55,7 +55,8 @@
                             <th class="calendarTableWeekCell">KW</th>
                             <th>Mo</th>
                             <th>Di</th>
-                            <th>Mi</th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="This top tooltip is themed via CSS variables.">Mi</th>
                             <th>Do</th>
                             <th>Fr</th>
                             <th>Sa</th>
@@ -71,13 +72,14 @@
         </div>
 
         <!-- Workday Tool -->
-        <div class="col"> 
+        <div class="col mx-auto pt-4" id="workdayTool"> 
+
             <!-- Selections -->
-            <div class="row">
-                <div class="col-7 mt-5">
-                    <!-- Country Selection -->
-                    <div class="dropdown mx-4">
-                        <button type="button" class="btn btn-accent row mx-0 mb-3" onclick="showDropdown('countryDropdown')" class="dropbtn" id="countryDropdownButton">Land auswählen</button>
+            <div class="row mx-auto d-flex justify-content-between" style="width: 100%;">
+                 <!-- Country Selection -->
+                <div class="col-auto p-0" style="max-width: 50%;">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-accent row mx-0 mb-1 me-1" onclick="showDropdown('countryDropdown')" class="dropbtn" id="countryDropdownButton">Land auswählen</button>
                         <div id="countryDropdown" class="dropdown-content list-group">
                             <!-- Search -->
                             <div class="input-group">
@@ -102,8 +104,8 @@
                         </div>
                     </div> 
                     <!-- County Selection -->
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-accent row mx-0 mb-3"  onclick="showDropdown('countyDropdown')" class="dropbtn" id="countyDropdownButton">Bundesland auswählen</button>
+                    <div class="dropdown col col-md-4 p-0">
+                        <button type="button" class="btn btn-accent row mx-0 mb-1"  onclick="showDropdown('countyDropdown')" class="dropbtn" id="countyDropdownButton">Bundesland auswählen</button>
                         <div id="countyDropdown" class="dropdown-content list-group">
                             <!-- Search -->
                             <div class="input-group">
@@ -122,29 +124,29 @@
                     </div>
                 </div>
                 <!-- Saturday Switch -->
-                <div class="col mt-3">
-                    <div class="form-check form-switch mt-5">
-                        <label class="form-check-label custom-control-label ms-3" for="saturdaySwitch"><h5 class="text-accent-color text-uppercase"> Samstag als Arbeitstag </h5></label>
-                        <input class="form-check-input" type="checkbox" id="saturdaySwitch" />
+                <div class="col-4 ms-auto p-0" style="min-width: min-content;">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input mt-3" type="checkbox" id="saturdaySwitch" />
+                        <label class="form-check-label custom-control-label ms-3 mt-0" for="saturdaySwitch" id="saturdayLable"><h5 class="text-accent-color text-uppercase"> Samstag als Arbeitstag </h5></label>
                     </div>
                 </div>
             </div>
 
             <!-- Tool -->
-            <div class="row mx-5" id="workdaysCalculationTable">
+            <div class="row mx-auto" id="workdaysCalculationTable">
                 <table class="table table-hover">
 
                     <!-- Datum Section -->
                     <thead class="sticky-top bg-white" style="z-index: 0;">
                         <tr>
-                            <th></th>
-                            <th scope="col">Start Datum</th>
+                            <th scope="row" class="col-4"></th>
+                            <th scope="col" class="col-4">Start Datum</th>
                             <th scope="col">End Datum</th>
                         </tr>
                         <tr>
                             <th scope="row">Datum</th>
-                            <td><input type="date" class="form-control" id="startDate" name="startDate"></td>
-                            <td><input type="date" class="form-control" id="endDate" name="endDate"></td>
+                            <td class="p-1"><input type="date" class="form-control" id="startDate" name="startDate"></td>
+                            <td class="p-1"><input type="date" class="form-control" id="endDate" name="endDate"></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -154,12 +156,12 @@
                             <td id="endDay"></td>
                         </tr>
                         <tr>
-                            <th scope="row" style="min-width: 17em">Kalenderwoche</th>
+                            <th scope="row">Kalenderwoche</th>
                             <td id="startWeek"></td>
                             <td id="endWeek"></td>
                         </tr>
                     </tbody>
-
+                    
                     <!-- Spinner -->
                     <tr class="style-accent-bg">
                         <th class="text-white"><h4>=</h4></th>
@@ -223,14 +225,17 @@
                             <td colspan="2"><input type="number" class="form-control" placeholder="Arbeitstage netto eingeben" id="workDaysNetto" onkeypress="return onlyNumberKey(event)"></td>
                         </tr>
                         <tr>
-                            <th scope="row">Kalenderwochen</th>
+                            <th scope="row" style="word-wrap: break-word; word-break: break-all;">Kalenderwochen</th>
                             <td colspan="2" id="calendarWeeks"></td>
                         </tr>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="KalenderWochenTool.css">
+
     </body>
 </html>
